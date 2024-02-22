@@ -1,31 +1,32 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins');
-
+ @import url('https://fonts.googleapis.com/css2?family=Prompt&family=Sarabun&display=swap');
+ 
 /* BASIC */
 
 html {
-  background-color: #56baed;
+  background-color: #56198b;
 }
 
 body {
-  font-family: "Poppins", sans-serif;
+  font-family: "Sarabun", sans-serif;
   height: 100vh;
 }
 
 a {
-  color: #92badd;
+  color: #56198b;
   display:inline-block;
   text-decoration: none;
-  font-weight: 400;
+  font-weight: 150;
 }
 
-h2 {
+h3 {
   text-align: center;
-  font-size: 16px;
+  font-size: 23px;
   font-weight: 600;
   text-transform: uppercase;
   display:inline-block;
   margin: 40px 8px 10px 8px; 
-  color: #cccccc;
+  color: #270133;
 }
 
 
@@ -59,31 +60,21 @@ h2 {
 #formFooter {
   background-color: #f6f6f6;
   border-top: 1px solid #dce8f1;
-  padding: 25px;
+  padding: 15px;
   text-align: center;
   -webkit-border-radius: 0 0 10px 10px;
   border-radius: 0 0 10px 10px;
 }
 
 
-
-/* TABS */
-
-h2.inactive {
-  color: #cccccc;
-}
-
-h2.active {
-  color: #0d0d0d;
-  border-bottom: 2px solid #5fbae9;
-}
+ 
 
 
 
 /* FORM TYPOGRAPHY*/
 
 input[type=button], input[type=submit], input[type=reset]  {
-  background-color: #56baed;
+  background-color: #56198b;
   border: none;
   color: white;
   padding: 15px 80px;
@@ -91,7 +82,7 @@ input[type=button], input[type=submit], input[type=reset]  {
   text-decoration: none;
   display: inline-block;
   text-transform: uppercase;
-  font-size: 13px;
+  font-size: 14px;
   -webkit-box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
   box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
   -webkit-border-radius: 5px 5px 5px 5px;
@@ -105,7 +96,7 @@ input[type=button], input[type=submit], input[type=reset]  {
 }
 
 input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover  {
-  background-color: #39ace7;
+  background-color: #945bc6;
 }
 
 input[type=button]:active, input[type=submit]:active, input[type=reset]:active  {
@@ -116,7 +107,7 @@ input[type=button]:active, input[type=submit]:active, input[type=reset]:active  
   transform: scale(0.95);
 }
 
-input[type=text] {
+input[type=text],input[type=password] {
   background-color: #f6f6f6;
   border: none;
   color: #0d0d0d;
@@ -237,7 +228,7 @@ input[type=text]:placeholder {
   bottom: -10px;
   width: 0;
   height: 2px;
-  background-color: #56baed;
+  background-color: #56198b;
   content: "";
   transition: width 0.2s;
 }
@@ -259,7 +250,7 @@ input[type=text]:placeholder {
 } 
 
 #icon {
-  width:60%;
+  width:30%;
 }
 
 * {
