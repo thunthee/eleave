@@ -22,11 +22,10 @@ a {
 
 h3 {
   text-align: center;
-  font-size: 23px;
-  font-weight: 600;
+  font-size: 24px; 
   text-transform: uppercase;
   display:inline-block;
-  margin: 40px 8px 10px 8px; 
+  margin: 10px 8px 10px 8px; 
   color: #270133;
 }
 
@@ -98,6 +97,7 @@ input[type=button], input[type=submit], input[type=reset]  {
 
 input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover  {
   background-color: #945bc6;
+  cursor: pointer;
 }
 
 input[type=button]:active, input[type=submit]:active, input[type=reset]:active  {
@@ -138,6 +138,10 @@ input[type=text]:placeholder {
   color: #cccccc;
 }
 
+img{
+	
+	margin: 30px 0 0 0; 
+}
 
 
 /* ANIMATIONS */
