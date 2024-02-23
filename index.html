@@ -1,37 +1,84 @@
 <!DOCTYPE html>
-<html lang="th" >
+<html lang="th">
+
 <head>
   <meta charset="UTF-8">
   <title>ลาออนไลน์</title>
- 
+
 </head>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
 <body>
-  
+
   <div class="wrapper fadeInDown">
-  <div id="formContent">
-    <!-- Tabs Titles -->
+    <div id="formContent">
 
-    <h3  > ระบบลาออนไลน์ </h3> 
-    <!-- Icon -->
-    <div class="fadeIn first">
-      <img src="./asset/logo/logo2.png" id="icon"   "/>
-      <link rel="stylesheet" href="./style.css">
+      <!-- Icon -->
+      <div class="fadeIn first">
+        <img src="./asset/logo/logo2.png" id="icon" "/>
+      <link rel=" stylesheet" href="./style.css">
+      </div>
+
+
+      <!-- Tabs Titles -->
+      <h3> ระบบลาออนไลน์ </h3>
+
+      <!-- Login Form -->
+      <form id="login-form" method="post" role="form">
+        <input type="text" id="username" class="fadeIn second" name="username" placeholder="รหัสพนักงาน">
+        <input type="password" id="password" class="fadeIn third" name="password" placeholder="รหัสผ่าน">
+        <input type="submit" class="fadeIn fourth" value="เข้าสู่ระบบ">
+      </form>
+
+      <!-- Remind Passowrd -->
+      <div id="formFooter">
+        <a class="underlineHover" href="#">ลืมรหัสผ่าน?</a>
+      </div>
+
     </div>
-
-    <!-- Login Form -->
-    <form>
-      <input type="text" id="login" class="fadeIn second" name="login" placeholder="รหัสพนักงาน">
-      <input type="password" id="password" class="fadeIn third" name="login" placeholder="รหัสผ่าน">
-      <input type="submit" class="fadeIn fourth" value="เข้าสู่ระบบ">
-    </form>
-
-    <!-- Remind Passowrd -->
-    <div id="formFooter">
-      <a class="underlineHover" href="#">ลืมรหัสผ่าน?</a>
-    </div>
-
   </div>
-</div>
 
 </body>
+
 </html>
+
+<script>
+
+  $('#login-form').submit(function (e) {
+
+    e.preventDefault()
+    const url = 'https://script.google.com/macros/s/AKfycbxvFbsXC1OiR3UqSOjtjidC_77ZpqPtSIeTm4SxwDqQDmaI45tXOizerxRyu14_ZNb6/exec';
+    fetch(url)
+      .then((res) => { return res.json() })
+      .then((data) => {
+        console.log(data);
+      })/*
+    var username = document.getElementById("username").value;
+    var password = document.getElementById("password").value;
+    var formData = new FormData();
+    formData.append('username', username);
+    formData.append('password', password);
+
+
+    var options = {
+      'method': 'post',
+      'contentType': 'application/json',
+      'payload': JSON.stringify(formData)
+    };
+
+    alert("response");
+    try {
+
+      var response = UrlFetchApp.fetch("http://www.google.com/");
+    }
+    catch (e) {
+      alert(e);
+    }
+    //Logger.log(response);
+    alert("response");
+    var data = JSON.parse(response);
+    alert(data);*/
+
+
+  });
+</script>
