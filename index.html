@@ -13,27 +13,25 @@
   <div class="wrapper fadeInDown">
     <div id="formContent">
 
-      <!-- Icon -->
+      <!-- Logo -->
       <div class="fadeIn first">
         <img src="./asset/logo/logo2.png" id="icon" "/>
       <link rel=" stylesheet" href="./style.css">
       </div>
 
 
-      <!-- Tabs Titles -->
       <h3> ระบบลาออนไลน์ </h3>
 
-      <!-- Login Form -->
       <form id="login-form" method="post" role="form">
         <input type="text" id="username" class="fadeIn second" name="username" placeholder="รหัสพนักงาน">
         <input type="password" id="password" class="fadeIn third" name="password" placeholder="รหัสผ่าน">
+        <p id="msg"></p>
         <input type="submit" class="fadeIn fourth" value="เข้าสู่ระบบ">
       </form>
 
-      <!-- Remind Passowrd -->
-      <div id="formFooter">
+      <!--div id="formFooter">
         <a class="underlineHover" href="#">ลืมรหัสผ่าน?</a>
-      </div>
+      </div-->
 
     </div>
   </div>
@@ -46,30 +44,65 @@
 
   $('#login-form').submit(function (e) {
     e.preventDefault()
-    const url = 'https://script.google.com/macros/s/AKfycbx1g-8UjyN171tSNk7sXODRb82cmzq0Uz5Dz9HjhCWxPgt1rraqFk-IwWTmwhcgLvr2/exec';
-     
+    document.getElementById("msg").innerHTML = "";
+
+    const url = 'https://script.google.com/macros/s/AKfycbyNz2uIocgyVQ9hZ7YgtMzwboYmi2SGJyxCErELqQIy8UsaC7eztcRO-klqdYw9j34B/exec';
     var username = document.getElementById("username").value;
     var password = document.getElementById("password").value;
     var formData = new FormData();
     formData.append('username', username);
     formData.append('password', password);
- 
+
     var options = {
       'method': 'post',
       'body': formData
     };
- 
-    try {  
-      fetch(url,options)
-       .then((res) => { return res.json() })
-       .then((data) => {
-         showOutput(data);
-       })
-    }catch (e) {
+
+    try {
+      fetch(url, options)
+        .then((res) => { return res.json() })
+        .then((data) => {
+
+            console.log(data);
+          if (data[0].status == "success") {
+            var obj = data[0].data;
+            sessionStorage.setItem("code", obj.code);
+            sessionStorage.setItem("firstname", obj.firstname);
+            sessionStorage.setItem("lastname", obj.lastname);
+            sessionStorage.setItem("timeLasetdActive",  Math.round(+new Date()/1000));
+            window.location.href="main.html";
+            // let personName = sessionStorage.getItem("timeLasetdActive");
+            //sessionStorage.removeItem("key");
+            //sessionStorage.clear();
+            //console.log(personName);
+            //document.getElementById("msg").innerHTML = personName; 
+          } else document.getElementById("msg").innerHTML = "รหัสพนักงานไม่ถูกต้อง";
+          //showOutput(data);
+        })
+    } catch (e) {
       alert(e);
     }
   });
 
+ 
+  $("#username").on("keyup", function () {
+    var value = $(this).val();
+    this.value = value.replace(/([a-zA-Zก-๙ `~%^&*!@#$()_|+=?;:'",.<script>{}])/g, '');
+
+    let end = this.value.length;
+    if (end == 3 || end == 6) {
+      var lastChar = value.substr(-1);
+      if (lastChar != "-")
+        this.value = value.slice(0, end-1) + "-" + lastChar;
+    }
+    else if (end > 10)
+      this.value = value.substring(0, 10);
+
+    end = this.value.length;
+    this.setSelectionRange(end, end);
+    this.focus(); 
+  });
+ 
 
   function showOutput(data) {
     data.forEach(row => {
