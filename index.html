@@ -45,40 +45,35 @@
 <script>
 
   $('#login-form').submit(function (e) {
-
     e.preventDefault()
-    const url = 'https://script.google.com/macros/s/AKfycbxvFbsXC1OiR3UqSOjtjidC_77ZpqPtSIeTm4SxwDqQDmaI45tXOizerxRyu14_ZNb6/exec';
-    fetch(url)
-      .then((res) => { return res.json() })
-      .then((data) => {
-        console.log(data);
-      })/*
+    const url = 'https://script.google.com/macros/s/AKfycbx1g-8UjyN171tSNk7sXODRb82cmzq0Uz5Dz9HjhCWxPgt1rraqFk-IwWTmwhcgLvr2/exec';
+     
     var username = document.getElementById("username").value;
     var password = document.getElementById("password").value;
     var formData = new FormData();
     formData.append('username', username);
     formData.append('password', password);
-
-
+ 
     var options = {
       'method': 'post',
-      'contentType': 'application/json',
-      'payload': JSON.stringify(formData)
+      'body': formData
     };
-
-    alert("response");
-    try {
-
-      var response = UrlFetchApp.fetch("http://www.google.com/");
-    }
-    catch (e) {
+ 
+    try {  
+      fetch(url,options)
+       .then((res) => { return res.json() })
+       .then((data) => {
+         showOutput(data);
+       })
+    }catch (e) {
       alert(e);
     }
-    //Logger.log(response);
-    alert("response");
-    var data = JSON.parse(response);
-    alert(data);*/
-
-
   });
+
+
+  function showOutput(data) {
+    data.forEach(row => {
+      console.log(row);
+    });
+  }
 </script>
