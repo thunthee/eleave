@@ -1,3 +1,8 @@
+<script>
+  if (sessionStorage.getItem("code") != null)
+    window.location.href = "main.html"; 
+</script>
+
 <!DOCTYPE html>
 <html lang="th">
 
@@ -46,7 +51,7 @@
     e.preventDefault()
     document.getElementById("msg").innerHTML = "";
 
-    const url = 'https://script.google.com/macros/s/AKfycbyNz2uIocgyVQ9hZ7YgtMzwboYmi2SGJyxCErELqQIy8UsaC7eztcRO-klqdYw9j34B/exec';
+    const url = 'https://script.google.com/macros/s/AKfycbw9D-_3ZqQXvS3CPPq0hiHZs4X3QJVdJtcmjVyiVFVqNAeB_hdjCtcIv5rj1nTlzUdh/exec';
     var username = document.getElementById("username").value;
     var password = document.getElementById("password").value;
     var formData = new FormData();
@@ -63,14 +68,19 @@
         .then((res) => { return res.json() })
         .then((data) => {
 
-            console.log(data);
+          console.log(data);
           if (data[0].status == "success") {
             var obj = data[0].data;
             sessionStorage.setItem("code", obj.code);
+            sessionStorage.setItem("prefix", obj.prefix); 
             sessionStorage.setItem("firstname", obj.firstname);
             sessionStorage.setItem("lastname", obj.lastname);
-            sessionStorage.setItem("timeLasetdActive",  Math.round(+new Date()/1000));
-            window.location.href="main.html";
+            sessionStorage.setItem("company", obj.company);
+            sessionStorage.setItem("branch", obj.branch);
+            sessionStorage.setItem("department", obj.department);
+            sessionStorage.setItem("part", obj.part);
+            sessionStorage.setItem("timeLasetdActive", Math.round(+new Date() / 1000));
+            window.location.href = "main.html";
             // let personName = sessionStorage.getItem("timeLasetdActive");
             //sessionStorage.removeItem("key");
             //sessionStorage.clear();
@@ -84,7 +94,7 @@
     }
   });
 
- 
+
   $("#username").on("keyup", function () {
     var value = $(this).val();
     this.value = value.replace(/([a-zA-Zก-๙ `~%^&*!@#$()_|+=?;:'",.<script>{}])/g, '');
@@ -93,16 +103,16 @@
     if (end == 3 || end == 6) {
       var lastChar = value.substr(-1);
       if (lastChar != "-")
-        this.value = value.slice(0, end-1) + "-" + lastChar;
+        this.value = value.slice(0, end - 1) + "-" + lastChar;
     }
     else if (end > 10)
       this.value = value.substring(0, 10);
 
     end = this.value.length;
     this.setSelectionRange(end, end);
-    this.focus(); 
+    this.focus();
   });
- 
+
 
   function showOutput(data) {
     data.forEach(row => {

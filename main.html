@@ -1,9 +1,23 @@
+<script>
+    if (sessionStorage.getItem("code") == null)
+        window.location.href = "index.html";
+    else {
+        var now = Math.round(+new Date() / 1000);
+        if (now - sessionStorage.getItem("timeLasetdActive") > 6000) {
+            sessionStorage.clear();
+            window.location.href = "index.html";
+        }
+        else
+            sessionStorage.setItem("timeLasetdActive", Math.round(+new Date() / 1000));
+    }
+</script>
+
 <!DOCTYPE html>
 <html lang="th">
- 
+
 <head>
-    
-  <meta charset="UTF-8">
+
+    <meta charset="UTF-8">
     <base target="_top">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -29,16 +43,15 @@
     </style>
 </head>
 
-<body onload="createReasonDropdown();">
+<body>
     <nav class="navbar" style="background-color: #3a67b1;">
- 
+
         <div class="container-fluid">
             <a class="navbar-brand text-white">ระบบบันทึกการลา </a>
-            <form method="post" class="d-flex"  > 
-                <button class="btn nav-bar float-end px-5 text-white" style="width:100%" type="submit" value="Logout"
-                    name="LoginButton">ออกจากระบบ</button>
-
-            </form>
+            <div class="d-flex">
+                <button class="btn nav-bar float-end px-5 text-white" style="width:100%" type="button"
+                    onclick="logout()" name="LoginButton">ออกจากระบบ</button>
+            </div>
         </div>
     </nav>
 
@@ -50,18 +63,22 @@
                 <form id="myForm" class="p-2 border border-light rounded bg-light" onsubmit="handleFormSubmit(this)">
                     <!-- Call JavaScript function "handleFormSubmit" -->
                     <p class="h4 mb-4 text-center">ฟอร์มขออนุมัติการลา</p>
-                    <!--div id="message"></div-->
-                    <input type="text" id="RecId" name="RecId" value="" style="display: none">
+                    <input type="text" id="rowNumber" name="rowNumber" value="" style="display: none">
 
-                    <div class="form-group">
-                        <label for="name">รหัสพนักงาน</label>
-                        <input type="text" class="form-control"   id="code" name="code" disabled>
+                    <div class="form-row">
+                        <div class="form-group col-md-5">
+                            <label for="name">รหัสพนักงาน</label>
+                            <input type="text" class="form-control" id="code" name="code" disabled>
+                        </div>
+
+                        <div class="form-group col-md-7">
+                            <label for="name">ชื่อ สกุล</label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="ชื่อ สกุล"
+                                disabled>
+                        </div>
+
                     </div>
 
-                    <div class="form-group">
-                        <label for="name">ชื่อ สกุล</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="ชื่อ สกุล" disabled>
-                    </div>
 
                     <div class="form-row">
 
@@ -77,7 +94,6 @@
                     </div>
 
 
-
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="end_date">ถึงวันที่</label>
@@ -91,8 +107,7 @@
 
 
                     <div class="form-row">
-
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-12">
                             <label for="">ประเภทการลา</label>
                             <select class="form-control" id="reason_option" name="reason_option">
                             </select>
@@ -101,15 +116,22 @@
 
 
                     <div class="form-row">
-                        <div class="form-group col-md-10">
+                        <div class="form-group col-md-12">
                             <label for="">เหตุผลการลา</label>
                             <input type="text" class="form-control" id="reason" name="reason" required>
                         </div>
                     </div>
 
 
+                    <div class="form-row">
+                        <div class="form-group col-md-12" style="display: flex; justify-content: space-around">
+                            <button style="visibility:hidden" onclick="cancelEdit()" type="button" id="btn_cancel"
+                                class="btn btn-primary">ยกเลิกแก้ไข</button>
+                            <button type="button" class="btn btn-primary" onclick="saveData()">บันทึกข้อมูล</button>
+                        </div>
+                    </div>
 
-                    <button type="submit" class="btn btn-primary">บันทึกข้อมูล</button>
+
                 </form>
                 <br><br>
                 <div id="output"></div>
@@ -120,12 +142,27 @@
 
                 <div style="font-size: 20px;padding-top: 30px;color: blue;" id="message2"> </div>
 
-                <p class="h4 mb-4 text-center" id="head_text">รายการลา</p> 
+                <p class="h4 mb-4 text-center" id="head_text">รายการลา</p>
                 <input class='form-control' id='myInput' type='text' placeholder='Search'> <br>
-                <div id="dataTable" class="table-responsive"></div>
+                <div class="table-responsive">
+                    <table class='table table-bordered table-striped' id="dataTable" style='font-size:0.9em'>
+                        <thead style='white-space: nowrap'>
+                            <tr>
+                                <th scope='col'>วันที่บันทึก</th>
+                                <th scope='col'>เริ่มต้นวันลา</th>
+                                <th scope='col'>สิ้นสุดวันลา</th>
+                                <th scope='col'>เวลา</th>
+                                <th scope='col'>ประเภท</th>
+                                <th scope='col'>เหตุผลการลา</th>
+                                <th scope='col'>สถานะ</th>
+                                <th scope='col'></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
                 <br>
                 <br><br>
-                <div id="output"></div>
             </div>
 
 
@@ -137,10 +174,203 @@
 </html>
 
 <script>
-     
-            let personName = sessionStorage.getItem("code");
-            let name = sessionStorage.getItem("firstname")+" "+sessionStorage.getItem("lastname");
-            document.getElementById("code").value = personName; 
-            
-            document.getElementById("name").value = name; 
+    const url = 'https://script.google.com/macros/s/AKfycbxNuFH5iewrd_OzzWLxUNCm3nfQbie8Dra_p0VS3a-34sOYVjmy-XKEkaN2aJNdhKD1/exec';
+
+    setShowPersonalData();
+    createReasonDropdown();
+    getPersonalLeaveList();
+
+    function getPersonalLeaveList() {
+
+        var formData = new FormData();
+        formData.append('type', "PersonalLeaveList");
+        formData.append('code', sessionStorage.getItem("code"));
+
+        var options = { 'method': 'post', 'body': formData };
+        try {
+            fetch(url, options)
+                .then((res) => { return res.json() })
+                .then((data) => {
+                    console.log(data);
+                    if (data[0].status == "success") {
+                        var obj = data[0].data;
+                        setPersonalLeaveList(obj);
+                    }
+                })
+        } catch (e) {
+            alert(e);
+        }
+    }
+
+    function setShowPersonalData() {
+        let name = sessionStorage.getItem("firstname") + " " + sessionStorage.getItem("lastname");
+        document.getElementById("code").value = sessionStorage.getItem("code");
+        document.getElementById("name").value = name;
+        document.getElementById("head_text").innerHTML = "รายการลา " + sessionStorage.getItem("prefix") + name;
+
+    }
+
+    function setPersonalLeaveList(obj) {
+
+        $('#dataTable tbody').empty();
+        var table = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
+
+        obj.forEach(row => {
+            var num_row = table.rows.length;
+            var c, r;
+            r = table.insertRow(num_row);
+            c = r.insertCell(0); c.innerHTML = row.createData;
+            c = r.insertCell(1); c.innerHTML = setFormateDate(row.startDate);
+            c = r.insertCell(2); c.innerHTML = setFormateDate(row.endDate);
+            c = r.insertCell(3); c.innerHTML = row.startTime + "-" + row.endTime;
+            c = r.insertCell(4); c.innerHTML = row.type;
+            c = r.insertCell(5); c.innerHTML = row.reason;
+            c = r.insertCell(6); c.innerHTML = row.status;
+            c = r.insertCell(7);
+            var new_ele_bt = document.createElement("button");
+            new_ele_bt.setAttribute('class', "btn btn-warning btn-sm");
+            new_ele_bt.innerHTML = "แก้ไข";
+            new_ele_bt.disabled = true;
+            if (row.status == "รออนุมัติ" || row.status == "")
+            {    
+                new_ele_bt.disabled = false;
+                new_ele_bt.onclick = function (e) {
+                    if (confirm("ยืนยันแก้ไขรายการ")) {
+                        document.getElementById('btn_cancel').style.visibility = "visible";
+                        setEditData(row);
+                    }
+                }
+            }
+            c.append(new_ele_bt);
+        });
+    }
+
+    function saveData() {
+        var start_date = document.getElementById('start_date').value;
+        var end_date = document.getElementById('end_date').value;
+        var start_time = document.getElementById('start_time').value;
+        var end_time = document.getElementById('end_time').value;
+        var reason = document.getElementById('reason').value;
+        var reason_option = document.getElementById('reason_option').value;
+        var rowNumber = document.getElementById('rowNumber').value;
+
+        if (start_date == "" || end_date == "")
+            alert("กรุณาระบุวันที่ต้องการลาให้ครบ");
+        else if (reason == "")
+            alert("กรุณาระบุเหตุผลการลา");
+        else if ((rowNumber == "" && confirm("ยืนยันการทำรายการ")) || (rowNumber != "" && confirm("ยืนยันแก้ไขข้อมูล"))) {
+            var formData = new FormData();
+            formData.append('type', "insertData");
+            formData.append('code', sessionStorage.getItem("code"));
+            formData.append('name', document.getElementById('name').value);
+            formData.append('company', sessionStorage.getItem("company"));
+            formData.append('branch', sessionStorage.getItem("branch"));
+            formData.append('department', sessionStorage.getItem("department"));
+            formData.append('part', sessionStorage.getItem("part"));
+            formData.append('start_date', start_date);
+            formData.append('end_date', end_date);
+            formData.append('start_time', start_time);
+            formData.append('end_time', end_time);
+            formData.append('reason', reason);
+            formData.append('reason_option', reason_option);
+            formData.append('rowNumber', rowNumber);
+
+            var options = { 'method': 'post', 'body': formData };
+            try {
+                fetch(url, options)
+                    .then((res) => { return res.json() })
+                    .then((data) => {
+                        console.log(data);
+                        if (data[0].status == "success") {
+                            alert("ทำรายการสำเร็จ");
+                            resetForm();
+                            getPersonalLeaveList();
+                        }
+                    })
+            } catch (e) {
+                alert(e);
+            }
+        }
+        return;
+    }
+
+    function setEditData(row) {
+        document.getElementById('start_date').value = row.startDate;
+        document.getElementById('end_date').value = row.endDate;
+        document.getElementById('start_time').value = setFormateTime(row.startTime);
+        document.getElementById('end_time').value = setFormateTime(row.endTime);
+        document.getElementById('reason').value = row.reason;
+        document.getElementById('reason_option').value = row.type;
+        document.getElementById('rowNumber').value = row.row;
+    }
+
+
+    function cancelEdit() {
+        if (confirm("ยกเลิกการแก้ไข ยืนยัน?")) {
+            resetForm();
+            document.getElementById('btn_cancel').style.visibility = "hidden";
+        }
+    }
+
+    function resetForm() {
+        document.getElementById('btn_cancel').style.visibility = "hidden";
+        document.getElementById('start_date').value = "";
+        document.getElementById('end_date').value = "";
+        document.getElementById('start_time').value = "";
+        document.getElementById('end_time').value = "";
+        document.getElementById('reason').value = "";
+        document.getElementById('rowNumber').value = "";
+    }
+
+    function setFormateDate(strDate) {
+        if (strDate == "") return;
+        var from = strDate.split("-")
+        return String(from[2]).padStart(2, '0') + "/" + String(from[1]).padStart(2, '0') + "/" + from[0];
+    }
+
+
+    function setFormateTime(strTime) {
+        if (strTime == "") return;
+        var from = strTime.split(":")
+        return String(from[0]).padStart(2, '0') + ":" + String(from[1]).padStart(2, '0');
+    }
+
+    function createReasonDropdown() {
+        var formData = new FormData();
+        formData.append('type', "Reason");
+
+        var options = { 'method': 'post', 'body': formData };
+        try {
+            fetch(url, options)
+                .then((res) => { return res.json() })
+                .then((data) => {
+                    if (data[0].status == "success") {
+                        var obj = data[0].data;
+                        reasonDropDown(obj);
+                    }
+                })
+        } catch (e) {
+            alert(e);
+        }
+    }
+
+
+    function reasonDropDown(obj) {
+        var list = document.getElementById('reason_option');
+        obj.forEach(row => {
+            var option = document.createElement("option");
+            option.value = row;
+            option.text = row;
+            list.appendChild(option);
+        });
+    }
+
+
+    function logout() {
+        if (confirm("ยืนยันออกจากระบบ")) {
+            sessionStorage.clear();
+            window.location.href = "index.html";
+        }
+    }
+
 </script>
