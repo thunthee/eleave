@@ -11,17 +11,28 @@
   <title>ลาออนไลน์</title>
 
 </head>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>  
+<link rel="stylesheet" href="style.css" />
+<style>
+ html {
+  background-color: #56198b;
+}
 
+body {
+  font-family: "Sarabun", sans-serif;
+  height: 100vh;
+}
+
+</style>
 <body>
-
+  <div  id="parent_loader"  class="loader-bg"><div id="loader" class="center"></div> </div>
+  
   <div class="wrapper fadeInDown">
     <div id="formContent">
 
       <!-- Logo -->
       <div class="fadeIn first">
         <img src="./asset/logo/logo2.png" id="icon" "/>
-      <link rel=" stylesheet" href="./style.css">
       </div>
 
 
@@ -48,10 +59,11 @@
 <script>
 
   $('#login-form').submit(function (e) {
-    e.preventDefault()
+    e.preventDefault()  
+    document.getElementById("parent_loader").style.visibility = "visible";  
     document.getElementById("msg").innerHTML = "";
 
-    const url = 'https://script.google.com/macros/s/AKfycbw9D-_3ZqQXvS3CPPq0hiHZs4X3QJVdJtcmjVyiVFVqNAeB_hdjCtcIv5rj1nTlzUdh/exec';
+    const url = 'https://script.google.com/macros/s/AKfycbxox7cTI_nTMiD3X_CeCq9fgFbY-0VayhDF14vxSAe9tfNzK-t5q9iP07ro7qL4XbCF/exec';
     var username = document.getElementById("username").value;
     var password = document.getElementById("password").value;
     var formData = new FormData();
@@ -68,17 +80,19 @@
         .then((res) => { return res.json() })
         .then((data) => {
 
+          document.getElementById("parent_loader").style.visibility = "hidden";
           console.log(data);
           if (data[0].status == "success") {
             var obj = data[0].data;
             sessionStorage.setItem("code", obj.code);
-            sessionStorage.setItem("prefix", obj.prefix); 
+            sessionStorage.setItem("prefix", obj.prefix);
             sessionStorage.setItem("firstname", obj.firstname);
             sessionStorage.setItem("lastname", obj.lastname);
             sessionStorage.setItem("company", obj.company);
             sessionStorage.setItem("branch", obj.branch);
             sessionStorage.setItem("department", obj.department);
             sessionStorage.setItem("part", obj.part);
+            sessionStorage.setItem("row_emp", obj.row_emp);
             sessionStorage.setItem("timeLasetdActive", Math.round(+new Date() / 1000));
             window.location.href = "main.html";
             // let personName = sessionStorage.getItem("timeLasetdActive");

@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+
+    <base target="_top">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+        </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
+        integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous">
+        </script>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sarabun">
+
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script> -->
+    <!--<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.4.0/dist/chartjs-plugin-datalabels.min.js"></script> -->
+
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-piechart-outlabels"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        body {
+            font-family: "Sarabun", sans-serif;
+            font-size: 15px;
+            align-items: center;
+            background-color: rgb(252, 242, 255);
+        }
+
+        .container {
+            padding: 0px;
+        }
+
+
+        .table thead {
+            background-color: #56198b;
+            color: whitesmoke;
+            position: sticky;
+            top: 0;
+        }
+
+        .my-custom-scrollbar {
+            position: relative;
+            height: 500px;
+            overflow: auto;
+        }
+
+        .table-wrapper-scroll-y {
+            display: block;
+        }
+
+        .Show {
+            max-height: 200px;
+            transition: max-height 1s;
+            display: none;
+        }
+
+        #btn-back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+        }
+
+        .btn_center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+
+
+
+    <div id="parent_loader" class="loader-bg">
+        <div id="loader" class="center"></div>
+    </div>
+
+
+
+    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+        <a class="navbar-brand text-white">ระบบบันทึกการลา Thun&Thee Group</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">รายการลาทั้งหมด</a>
+                </li>
+
+                <li class="nav-item">
+                    <button class="btn btn-danger nav-bar float-end  text-white btn_center"
+                        style=" width:100%;" type="button">
+                        <span class="material-icons" style="box-sizing: border-box;  float: left; padding: 2px;"> mail
+                        </span>
+                        <a style="box-sizing: border-box; float: left; padding: 2px;" id="txt_paddingList"> </a>
+                    </button>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+
+
+
+
+    <div class="container  feature px-lg-0">
+        <div class="row  g-0 mx-lg-0 ">
+
+            <div class="col-lg-5" style="margin-top: 30px; text-align: center;">
+
+                <form id="myForm" class="p-3 border border-dark rounded bg-light   " onsubmit="handleFormSubmit(this)">
+                    <!-- Call JavaScript function "handleFormSubmit" -->
+                    <b>
+                        <p class="h5 mb-4 text-center">ข้อมูลขออนุมัติลา</p>
+                    </b>
+                    <input type="text" id="rowNumber" name="rowNumber" value="" style="display: none">
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="col-md-4" style="text-align: left;">
+                                <b>
+                                    <p for="name">เลขเอกสาร</p>
+                                </b>
+                            </div>
+                            <div class="col-md-8" style="text-align: left;">
+                                <p id="doc_no" name="doc_no"></p>
+                            </div>
+                        </div>
+
+
+                        <div class="form-row">
+                            <div class="col-md-4" style="text-align: left;">
+                                <b>
+                                    <p for="name">ชื่อ</p>
+                                </b>
+                            </div>
+                            <div class="col-md-8" style="text-align: left;">
+                                <p id="name" name="name"></p>
+                                <input hidden id="code" name="code"></input>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-4" style="text-align: left;">
+                                <b>
+                                    <p for="name">แผนก</p>
+                                </b>
+                            </div>
+                            <div class="col-md-8" style="text-align: left;">
+                                <p id="department" name="department"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-4" style="text-align: left;">
+                                <b>
+                                    <p for="name">ลาวันที่</p>
+                                </b>
+                            </div>
+                            <div class="col-md-8" style="text-align: left;">
+                                <p id="start_date" name="start_date"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-4" style="text-align: left;">
+                                <b>
+                                    <p for="name">ลาถึงวันที่</p>
+                                </b>
+                            </div>
+                            <div class="col-md-8" style="text-align: left;">
+                                <p id="end_date" name="end_date"></p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-row">
+                            <div class="col-md-4" style="text-align: left;">
+                                <b>
+                                    <p for="count_day">จำนวนวันลา</p>
+                                </b>
+                            </div>
+                            <div class="col-md-8" style="text-align: left;">
+                                <p id="count_day" name="count_day"></p>
+                            </div>
+                        </div>
+
+
+                        <div class="form-row">
+                            <div class="col-md-4" style="text-align: left;">
+                                <b>
+                                    <p for="reason_option mt-1">ประเภท</p>
+                                </b>
+                            </div>
+                            <div class="col-md-8" style="text-align: left;">
+                                <p id="reason_option" name="reason_option"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-4" style="text-align: left;">
+                                <b>
+                                    <p for="reason">หมายเหตุ</p>
+                                </b>
+                            </div>
+                            <div class="col-md-8" style="text-align: left;">
+                                <p id="reason" name="reason"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-4" style="text-align: left;">
+                                <b>
+                                    <p for="status">สถานะ</p>
+                                </b>
+                            </div>
+                            <div class="col-md-8" style="text-align: left;">
+                                <p id="status" name="status"></p>
+                            </div>
+                        </div>
+
+
+                        <div class="form-row">
+                            <div class="col-md-4" style="text-align: left;">
+                                <b>
+                                    <p for="status">ผู้อนุมัติ/ไม่อนุมัติ</p>
+                                </b>
+                            </div>
+                            <div class="col-md-8" style="text-align: left;">
+                                <p id="mng_name" name="mng_name"></p>
+                            </div>
+                        </div>
+
+
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <button type="button" class="btn btn-primary" id="btn_approve"
+                                    onclick="setApprove(true)">อนุมัติ</button>
+
+
+                                <button type="button" id="btn_reject" onclick="setApprove(false)"
+                                    class="btn btn-warning">ไม่อนุมัติ</button>
+
+
+                                <button type="button" id="btn_cancel" onclick="cancelLeave()"
+                                    class="btn btn-danger">ยกเลิก</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <br><br>
+
+
+            </div>
+            <div class="col-lg-7 pt-5" style="float:center;">
+                <div class="row">
+                    <canvas height="100" id="myChart"></canvas>
+                </div>
+                <div class="row">
+                    <p id="text_head">สรุปจำนวนวันลา (ที่อนุมัติ)</p>
+                    <table class='table table-sm  table-bordered table-striped mb-0 ' id="SumTable" name="SumTable"
+                        style='font-size:0.9em'>
+                        <thead style='white-space: nowrap'>
+                            <tr>
+                                <th scope='col' style="width: 10%;">ประเภท</th>
+                                <th scope='col' style="width: 13%;">จำนวนวันลาที่ใช้</th>
+                            </tr>
+                        </thead>
+                        <tbody id="mySumTable"></tbody>
+                    </table>
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+
+        <div class="row  g-0 mx-lg-0">
+            <div class="col-lg-12" style=" text-align: center;">
+                <p class="h5 mb-4 text-center  pt-4" id="head_text">รายการลาทั้งหมด</p>
+                <button onclick="ShowLeaveListTable()" id="btn_showList">แสดง</button>
+
+
+                <div class="table-wrapper-scroll-y my-custom-scrollbar Show" id="div_dataTable">
+                    <!-- class=" table-wrapper-scroll-y my-custom-scrollbar" -->
+                    <input class='form-control input-sm' id='inputSearch' type='text' placeholder='ค้นหา'> <br>
+
+
+                    <table class='table table-sm table-bordered table-striped mb-0' id="dataTable" name="dataTable"
+                        style='font-size:0.9em'>
+                        <thead style='white-space: nowrap'>
+                            <tr>
+                                <th scope='col' style="width: 10%;">เลขเอกสาร</th>
+                                <th scope='col' style="width: 10%;">เริ่มต้นวันลา</th>
+                                <th scope='col' style="width: 10%;">สิ้นสุดวันลา</th>
+                                <th scope='col' style="width: 13%;">รวมจำนวนวันลา</th>
+                                <th scope='col' style="width: 10%;">ประเภท</th>
+                                <th scope='col' style="width: 15%;">เหตุผลการลา</th>
+                                <th scope='col' style="width: 8%;">สถานะ</th>
+                                <th scope='col'></th>
+                                <th scope='col'></th>
+                                <th scope='col'></th>
+                            </tr>
+                        </thead>
+                        <tbody id="myTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-danger btn-floating btn-sm" id="btn-back-to-top">
+
+        <i class="material-icons" style="font-size:18px;color:rgb(201, 201, 201)">expand_less</i>
+    </button>
+
+
+</body>
+
+</html>
+
+<script>
+    const url = 'https://script.google.com/macros/s/AKfycbxn4jGDu3stB4KPBMMQeuiuLL9XSxjUdARsMDQpSZ3vGaU4V_VqD0DfM5rCJjLwOfte/exec';
+
+
+    let btn_up = document.getElementById("btn-back-to-top");
+    btn_up.addEventListener("click", backToTop);
+
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function () {
+        scrollFunction();
+    };
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20)
+            btn_up.style.display = "block";
+        else
+            btn_up.style.display = "none";
+    }
+
+    function backToTop() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+
+
+    $("#inputSearch").on("keyup", function () {
+        var value = $(this).val().toLowerCase(); $("#myTable tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+
+
+    let part_code = getPartCode(/(\?|&)part\=([^&]*)/);
+    let part_emp = getPartCode(/(\?|&)emp\=([^&]*)/);
+    let part_mng_per = decodeURIComponent(window.location.search.match(/(\?|&)per\=([^&]*)/)[2]);
+    let part_mng = getPartCode(/(\?|&)ind\=([^&]*)/);
+
+    if (!isNumeric(part_code) || !isNumeric(part_emp) || !isNumeric(part_mng_per) || !isNumeric(part_mng)) {
+        alert("Error");
+        exit();
+    }
+
+    setShowThisLeave(part_code);
+    getPersonalLeaveSummary(part_emp);
+    getPendingList(part_mng);
+
+    var isFirstClickShowList = true;
+
+    function isNumeric(value) {
+        return /^-?\d+$/.test(value);
+    }
+
+
+    function ShowLeaveListTable() {
+        var x = document.getElementById("div_dataTable");
+        if (x.className === "table-wrapper-scroll-y my-custom-scrollbar Show") {
+            if (isFirstClickShowList == true) {
+                isFirstClickShowList = false;
+                getPersonalLeaveList(part_code);
+            }
+            x.className = "table-wrapper-scroll-y my-custom-scrollbar";
+            document.getElementById("btn_showList").innerHTML = "ซ่อน"
+
+            var ele = document.getElementById("div_dataTable");
+            // ele.scrollTop = ele.scrollHeight;
+            ele.scrollTo({ left: 0, top: document.body.scrollHeight, behavior: "smooth" });
+
+
+            //window.scrollTo(0, document.body.scrollHeight);
+            window.scrollTo({ left: 0, top: document.body.scrollHeight, behavior: "smooth" });
+            //$('html,body').animate({scrollTop: document.body.scrollHeight},"fast");
+            // document.body.scrollTop = document.body.scrollHeight;;
+
+        } else {
+            document.getElementById("btn_showList").innerHTML = "แสดง"
+            x.className = "table-wrapper-scroll-y my-custom-scrollbar Show";
+        }
+    }
+
+
+    function getPendingList(part_mng) {
+        var formData = new FormData();
+        formData.append('type', "PendingList");
+        formData.append('index_mng', part_mng);
+
+        var options = { 'method': 'post', 'body': formData };
+        try {
+            fetch(url, options)
+                .then((res) => { return res.json() })
+                .then((data) => {
+                    console.log(data);
+                    
+                    document.getElementById("parent_loader").style.visibility = "hidden";
+                    if (data[0].status == "success") {
+                        var obj = data[0].data;
+                        document.getElementById("txt_paddingList").innerHTML = obj.length + " ใบลารอพิจารณา";
+
+                    }
+                })
+        } catch (e) {
+            alert(e);
+        }
+    }
+
+
+    function getPersonalLeaveSummary(part_emp) {
+        
+        var formData = new FormData();
+        formData.append('type', "PersonalLeaveSummary");
+        formData.append('row_emp', part_emp);
+        var options = { 'method': 'post', 'body': formData };
+        try {
+            fetch(url, options)
+                .then((res) => { return res.json() })
+                .then((data) => {
+                    if (data[0].status == "success") {
+                        var obj = data[0].data;
+                        setChart(obj);
+                    }
+                })
+        } catch (e) {
+            alert(e);
+        }
+    }
+
+
+    function setChart(obj) {
+
+        var colors = ['#007bff', '#28a745', '#333333', '#c3e6cb', '#dc3545', '#6c757d'];
+        var g_labels = [];
+        var g_hr = [];
+
+        $('#SumTable tbody').empty();
+        var table = document.getElementById('SumTable').getElementsByTagName('tbody')[0];
+
+        obj.forEach(row => {
+
+            var result = row.total_hr.split(":");
+            var hr = parseInt(result[0]) / 8;
+
+            g_labels.push(row.type);
+            g_hr.push(hr);//parseInt(row.sum_day)
+
+            var num_row = table.rows.length;
+            var c, r;
+            r = table.insertRow(num_row);
+            c = r.insertCell(0); c.style.textAlign = "center"; c.style.verticalAlign = "middle";
+            c.innerHTML = row.type;
+
+            var txt_count_day = "";
+            if (parseInt(row.sum_day) != 0)
+                txt_count_day += parseInt(row.sum_day) + " วัน ";
+            if (parseInt(row.sum_hr) != 0)
+                txt_count_day += parseInt(row.sum_hr) + " ชั่วโมง ";
+            if (parseInt(row.sum_minute) != 0)
+                txt_count_day += parseInt(row.sum_minute) + " นาที ";
+
+
+            c = r.insertCell(1); c.style.textAlign = "center"; c.style.verticalAlign = "middle";
+            c.innerHTML = txt_count_day;
+
+        });
+
+        var donutOptions = {
+            cutoutPercentage: 0,
+            legend: {
+                display: false,
+            },
+            layout: {
+                padding: 50
+            },
+            plugins: {
+                outlabels: {
+                    text: '%l %v วัน',
+                    color: '#fff',
+                    font: {
+                        resizable: true,
+                        minSize: 14,
+                        maxSize: 18
+                    }
+                }
+            },
+            title: {
+                display: false,
+                text: 'สรุปจำนวนวันลาที่อนุมัติแล้ว',
+            }
+        };
+
+        // donut 1
+        var chDonutData1 = {
+            labels: g_labels,
+            datasets: [
+                {
+                    backgroundColor: colors.slice(0, 3),
+                    borderWidth: 0,
+                    data: g_hr,
+                    borderColor: "#fff"
+                }
+            ]
+        };
+
+        var chDonut1 = document.getElementById("myChart");
+        if (chDonut1) {
+            new Chart(chDonut1, {
+                type: 'pie',
+                data: chDonutData1,
+                options: donutOptions
+            });
+        }
+
+    }
+
+    function getPartCode(text) {
+        let part_code = decodeURIComponent(window.location.search.match(text)[2]);
+
+        let count_first_random = 15;
+        let count_second_random = 20;
+        if (part_code.length < (count_first_random + count_second_random + 1))
+            return "error";
+
+        let random_txt = part_code.substring(0, count_first_random);
+        let random_txt2 = part_code.substring(part_code.length - count_second_random);
+
+        let row = part_code.replace(random_txt, "");
+        return row.replace(random_txt2, "")
+    }
+
+    function getPersonalLeaveList(part_code) {
+
+        var formData = new FormData();
+        formData.append('type', "PersonalLeaveList");
+        formData.append('code', "");
+        formData.append('part_code', part_code);
+
+        document.getElementById("parent_loader").style.visibility = "visible";
+        var options = { 'method': 'post', 'body': formData };
+        try {
+            fetch(url, options)
+                .then((res) => { return res.json() })
+                .then((data) => {
+                    console.log(data);
+                    if (data[0].status == "success") {
+                        var obj = data[0].data;
+                        setPersonalLeaveList(obj);
+
+                        document.getElementById("parent_loader").style.visibility = "hidden";
+                    }
+                })
+        } catch (e) {
+            alert(e);
+        }
+    }
+
+    function setShowThisLeave(part_code) {
+        
+        document.getElementById("parent_loader").style.visibility = "visible";
+
+        var formData = new FormData();
+        formData.append('type', "PersonalLeaveRow");
+        formData.append('row', part_code);
+
+        var options = { 'method': 'post', 'body': formData };
+        try {
+            fetch(url, options)
+                .then((res) => { return res.json() })
+                .then((data) => {
+                    console.log(data);
+                    if (data[0].status == "success") {
+                        var obj = data[0].data;
+                        setShowDataLeave(obj[0]);
+                    }
+                })
+        } catch (e) {
+            alert(e);
+        }
+
+    }
+
+
+    function setShowDataLeave(obj) {
+        var txt_count_day = "";
+        if (obj.day.substring(0, 1) != 0)
+            txt_count_day += obj.day + " ";
+        if (obj.hours.substring(0, 1) != 0)
+            txt_count_day += obj.hours + " ";
+        if (obj.minute.substring(0, 1) != 0)
+            txt_count_day += obj.minute + " ";
+
+        document.getElementById("text_head").innerHTML = "สรุปจำนวนวันลาของ " + obj.name;
+        document.getElementById("head_text").innerHTML = "รายการลาทั้งหมดของ " + obj.name;
+        document.getElementById("doc_no").innerHTML = obj.document;
+        document.getElementById("name").innerHTML = obj.name + " (" + obj.code + ")";
+        document.getElementById("department").innerHTML = obj.department + " (" + obj.part + ")"
+        document.getElementById("start_date").innerHTML = setFormateDate(obj.startDate) + " เวลา " + obj.startTime + " น.";
+        document.getElementById("end_date").innerHTML = setFormateDate(obj.endDate) + " เวลา " + obj.endTime + " น.";
+        document.getElementById("count_day").innerHTML = txt_count_day;
+        document.getElementById("reason_option").innerHTML = obj.type;
+        document.getElementById("reason").innerHTML = obj.reason;
+        document.getElementById("rowNumber").value = obj.row;
+        document.getElementById("status").innerHTML = obj.status;
+        document.getElementById("code").value = obj.code;
+        document.getElementById("mng_name").innerHTML = obj.mng_name;
+
+
+        if (obj.status == "รออนุมัติ" || obj.status == "") {
+            document.getElementById("btn_approve").disabled = false;
+            document.getElementById("btn_reject").disabled = false;
+        } else {
+            document.getElementById("btn_approve").disabled = true;
+            document.getElementById("btn_reject").disabled = true;
+        }
+    }
+
+
+    function setPersonalLeaveList(obj) {
+        $('#dataTable tbody').empty();
+        var table = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
+        obj.forEach(row => {
+
+
+            time_finish_work = row.time_finish_work;
+            time_start_work = row.time_start_work;
+
+            var num_row = table.rows.length;
+            var c, r;
+            r = table.insertRow(num_row);
+
+            if (part_code == row.row) {
+                setShowDataLeave(row);
+            }
+            c = r.insertCell(0); c.style.textAlign = "center"; c.style.verticalAlign = "middle";
+            c.innerHTML = row.document + "<br>" + row.createData.substring(0, row.createData.length - 3);
+
+            var txt_count_day = "";
+            if (row.day.substring(0, 1) != 0)
+                txt_count_day += row.day + " ";
+            if (row.hours.substring(0, 1) != 0)
+                txt_count_day += row.hours + " ";
+            if (row.minute.substring(0, 1) != 0)
+                txt_count_day += row.minute + " ";
+
+            c = r.insertCell(1); c.style.textAlign = "center"; c.style.verticalAlign = "middle";
+            c.innerHTML = setFormateDate(row.startDate) + "<br>เวลา: " + row.startTime;
+
+            c = r.insertCell(2); c.style.textAlign = "center"; c.style.verticalAlign = "middle";
+            c.innerHTML = setFormateDate(row.endDate) + "<br>เวลา: " + row.endTime;
+
+            c = r.insertCell(3); c.style.textAlign = "center"; c.style.verticalAlign = "middle";
+            c.innerHTML = txt_count_day;
+
+            c = r.insertCell(4); c.style.textAlign = "center"; c.style.verticalAlign = "middle";
+            c.innerHTML = row.type;
+
+            c = r.insertCell(5); c.style.verticalAlign = "middle";
+            c.innerHTML = row.reason;
+
+            c = r.insertCell(6); c.style.textAlign = "center"; c.style.verticalAlign = "middle";
+            c.innerHTML = row.status;
+
+            c = r.insertCell(7); c.style.textAlign = "center"; c.style.verticalAlign = "middle";
+            var new_ele_bt = document.createElement("button");
+            new_ele_bt.setAttribute('class', "btn btn-primary btn-sm");
+            new_ele_bt.innerHTML = "อนุมัติ";
+            new_ele_bt.disabled = true;
+            new_ele_bt.onclick = function (e) {
+                setApprove(true, row.row, row.document);
+            }
+            c.append(new_ele_bt);
+
+            c = r.insertCell(8); c.style.textAlign = "center"; c.style.verticalAlign = "middle";
+            var btn_ele_rej = document.createElement("button");
+            btn_ele_rej.setAttribute('class', "btn btn-warning btn-sm");
+            btn_ele_rej.innerHTML = "ไม่อนุมัติ";
+            btn_ele_rej.disabled = true;
+            btn_ele_rej.onclick = function (e) {
+                setApprove(false, row.row, row.document);
+            }
+            c.append(btn_ele_rej);
+
+
+            c = r.insertCell(9); c.style.textAlign = "center"; c.style.verticalAlign = "middle";
+            var del_ele_ct = document.createElement("button");
+            del_ele_ct.setAttribute('class', "btn btn-danger btn-sm");
+            del_ele_ct.innerHTML = "ยกเลิก";
+            del_ele_ct.onclick = function (e) {
+                cancelLeave(row.row, row.document);
+            }
+            c.append(del_ele_ct);
+
+            if (row.status == "รออนุมัติ" || row.status == "") {
+                new_ele_bt.disabled = false;
+                btn_ele_rej.disabled = false;
+            }
+
+            var ele = document.getElementById("div_dataTable");
+            ele.scrollTop = ele.scrollHeight;
+
+        });
+
+
+    }
+
+
+    function setApprove(status, list_row = 0, doc_no = "") {
+        var txt_ask = "ยืนยัน ไม่อนุมัติ รายการลา ";
+        if (status == true)
+            txt_ask = "ยืนยัน อนุมัติ รายการลา ";
+        if (doc_no == "")
+            doc_no = document.getElementById("doc_no").innerHTML;
+
+        if (!confirm(txt_ask + doc_no))
+            return;
+
+        var row = document.getElementById("rowNumber").value;
+        if (list_row == 0)
+            list_row = row;
+        var formData = new FormData();
+        formData.append('type', "setApprove");
+        formData.append('mng', part_mng);
+        formData.append('mng_per', part_mng_per);
+        formData.append('rowNumber', list_row);
+        formData.append('status', status);
+
+        //alert(list_row);
+        //return; 
+        
+        document.getElementById("parent_loader").style.visibility = "visible";
+        var options = { 'method': 'post', 'body': formData };
+        try {
+            fetch(url, options)
+                .then((res) => { return res.json() })
+                .then((data) => {
+                    //alert(JSON.stringify(data)); 
+
+                    if (data[0].status == "success") {
+                        alert("ทำรายการสำเร็จ");
+                        getPersonalLeaveSummary(part_emp);
+                        getPersonalLeaveList(part_code); 
+                        getPendingList(part_mng);
+                    }
+                })
+        } catch (e) {
+            alert(e);
+        }
+    }
+
+
+
+    function cancelLeave(list_row = 0, doc_no = "") {
+
+        if (doc_no == "")
+            doc_no = document.getElementById("doc_no").innerHTML;
+
+        if (!confirm("ต้องการ ยกเลิกรายการลา " + doc_no + " ยืนยัน?"))
+            return;
+
+        var row = document.getElementById("rowNumber").value;
+        if (list_row == 0)
+            list_row = row;
+
+        var formData = new FormData();
+        formData.append('type', "cancelLeave");
+        formData.append('code', document.getElementById("code").value);
+        formData.append('mng', part_mng);
+        formData.append('mng_per', part_mng_per);
+        formData.append('rowNumber', list_row);
+        var options = { 'method': 'post', 'body': formData };
+        
+        document.getElementById("parent_loader").style.visibility = "visible";
+        try {
+            fetch(url, options)
+                .then((res) => { return res.json() })
+                .then((data) => {
+                    console.log(data);
+                    if (data[0].status == "success") {
+                        alert("ยกเลิกรายการสำเร็จ");
+                        getPersonalLeaveSummary(part_emp);
+                        getPersonalLeaveList(part_code);
+                        getPendingList(part_mng);
+                    }
+                })
+        } catch (e) {
+            alert(e);
+        }
+
+    }
+
+
+
+
+    function setFormateDate(strDate) {
+        if (strDate == "") return;
+        var from = strDate.split("-")
+        return String(from[2]).padStart(2, '0') + "/" + String(from[1]).padStart(2, '0') + "/" + from[0];
+    }
+
+
+    function setFormateTime(strTime) {
+        if (strTime == "") return;
+        var from = strTime.split(":")
+        return String(from[0]).padStart(2, '0') + ":" + String(from[1]).padStart(2, '0');
+    }
+
+
+
+</script>

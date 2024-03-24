@@ -2,15 +2,48 @@
  @import url('https://fonts.googleapis.com/css2?family=Prompt&family=Sarabun&display=swap');
  
 /* BASIC */
-
-html {
-  background-color: #56198b;
+ 
+#loader {
+  position: absolute;
+border: 12px solid #f3f3f3;
+border-radius: 50%;
+border-top: 12px solid #444444;
+width: 70px;
+height: 70px; 
+animation: spin 1s linear infinite;   
 }
 
-body {
-  font-family: "Sarabun", sans-serif;
-  height: 100vh;
+.loader-bg {
+position: fixed;
+top: 0;
+bottom: 0;
+left: 0;
+right: 0;
+height: 100vh;
+width: 100%;
+z-index: 1111111;
+backdrop-filter: blur(3px);
+visibility: hidden;    
 }
+
+.center {
+position: absolute;
+z-index: 100;
+top: 0;
+bottom: 0;
+left: 0;
+right: 0;
+margin: auto;
+}
+
+@keyframes spin {
+100% {
+    transform: rotate(360deg);
+}
+}
+
+
+
 
 a {
   color: #56198b;
@@ -28,7 +61,6 @@ h3 {
   margin: 10px 8px 10px 8px; 
   color: #270133;
 }
-
 
 
 /* STRUCTURE */
@@ -108,7 +140,7 @@ input[type=button]:active, input[type=submit]:active, input[type=reset]:active  
   transform: scale(0.95);
 }
 
-input[type=text],input[type=password] {
+#username, #password {
   background-color: #f6f6f6;
   border: none;
   color: #0d0d0d;
@@ -129,12 +161,12 @@ input[type=text],input[type=password] {
   border-radius: 5px 5px 5px 5px;
 }
 
-input[type=text]:focus {
+#username:focus {
   background-color: #fff;
   border-bottom: 2px solid #5fbae9;
 }
 
-input[type=text]:placeholder {
+#username:placeholder {
   color: #cccccc;
 }
 
