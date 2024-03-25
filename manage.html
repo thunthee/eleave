@@ -101,8 +101,8 @@
                 </li>
 
                 <li class="nav-item">
-                    <button class="btn btn-danger nav-bar float-end  text-white btn_center"
-                        style=" width:100%;" type="button">
+                    <button class="btn btn-danger nav-bar float-end  text-white btn_center" style=" width:100%;"
+                        type="button">
                         <span class="material-icons" style="box-sizing: border-box;  float: left; padding: 2px;"> mail
                         </span>
                         <a style="box-sizing: border-box; float: left; padding: 2px;" id="txt_paddingList"> </a>
@@ -370,6 +370,7 @@
     let part_emp = getPartCode(/(\?|&)emp\=([^&]*)/);
     let part_mng_per = decodeURIComponent(window.location.search.match(/(\?|&)per\=([^&]*)/)[2]);
     let part_mng = getPartCode(/(\?|&)ind\=([^&]*)/);
+    var isFirstClickShowList = true;
 
     if (!isNumeric(part_code) || !isNumeric(part_emp) || !isNumeric(part_mng_per) || !isNumeric(part_mng)) {
         alert("Error");
@@ -380,7 +381,6 @@
     getPersonalLeaveSummary(part_emp);
     getPendingList(part_mng);
 
-    var isFirstClickShowList = true;
 
     function isNumeric(value) {
         return /^-?\d+$/.test(value);
@@ -425,12 +425,13 @@
                 .then((res) => { return res.json() })
                 .then((data) => {
                     console.log(data);
-                    
+
                     document.getElementById("parent_loader").style.visibility = "hidden";
                     if (data[0].status == "success") {
                         var obj = data[0].data;
                         document.getElementById("txt_paddingList").innerHTML = obj.length + " ใบลารอพิจารณา";
-
+                        var a = document.getElementById('txt_paddingList');
+                        a.href = "https://translate.google.com/"
                     }
                 })
         } catch (e) {
@@ -440,7 +441,7 @@
 
 
     function getPersonalLeaveSummary(part_emp) {
-        
+
         var formData = new FormData();
         formData.append('type', "PersonalLeaveSummary");
         formData.append('row_emp', part_emp);
@@ -588,7 +589,7 @@
     }
 
     function setShowThisLeave(part_code) {
-        
+
         document.getElementById("parent_loader").style.visibility = "visible";
 
         var formData = new FormData();
@@ -759,7 +760,7 @@
 
         //alert(list_row);
         //return; 
-        
+
         document.getElementById("parent_loader").style.visibility = "visible";
         var options = { 'method': 'post', 'body': formData };
         try {
@@ -771,7 +772,7 @@
                     if (data[0].status == "success") {
                         alert("ทำรายการสำเร็จ");
                         getPersonalLeaveSummary(part_emp);
-                        getPersonalLeaveList(part_code); 
+                        getPersonalLeaveList(part_code);
                         getPendingList(part_mng);
                     }
                 })
@@ -801,7 +802,7 @@
         formData.append('mng_per', part_mng_per);
         formData.append('rowNumber', list_row);
         var options = { 'method': 'post', 'body': formData };
-        
+
         document.getElementById("parent_loader").style.visibility = "visible";
         try {
             fetch(url, options)
