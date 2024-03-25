@@ -236,7 +236,7 @@
 </html>
 
 <script>
-    const url = 'https://script.google.com/macros/s/AKfycbxim0XQN-53kQ8i8LKvmrDNOT3b2H0HhCIpv7PfOAejQYDl4z11qoCsiSHjmipU09ws/exec';
+    const url = 'https://script.google.com/macros/s/AKfycbxaafXuvWzYbEh-UD_5uL-PfX3X1tNssaQttFpFiBBWVlvQ4cf-avSPlDs20E95rdjV/exec';
 
     var ori_start_date = "";
     var ori_end_date = "";
@@ -351,6 +351,8 @@
         document.getElementById("name").value = name;
         document.getElementById("head_text").innerHTML = "บันทึกการลา " + sessionStorage.getItem("prefix") + name;
 
+        time_finish_work = sessionStorage.getItem("time_finish_work");
+        time_start_work = sessionStorage.getItem("time_start_work");
     }
 
     function setPersonalLeaveList(obj) {
@@ -359,9 +361,6 @@
         var table = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
 
         obj.forEach(row => {
-
-            time_finish_work = row.time_finish_work;
-            time_start_work = row.time_start_work;
 
             var num_row = table.rows.length;
             var c, r;
@@ -534,7 +533,7 @@
         formData.append('type', "cancelLeave");
         formData.append('code', sessionStorage.getItem("code"));
         formData.append('row_emp', sessionStorage.getItem("row_emp"));
-        formData.append('rowNumber', row.row); 
+        formData.append('rowNumber', row.row);
         var options = { 'method': 'post', 'body': formData };
         document.getElementById("parent_loader").style.visibility = "visible";
 

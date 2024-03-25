@@ -63,7 +63,7 @@ body {
     document.getElementById("parent_loader").style.visibility = "visible";  
     document.getElementById("msg").innerHTML = "";
 
-    const url = 'https://script.google.com/macros/s/AKfycbxim0XQN-53kQ8i8LKvmrDNOT3b2H0HhCIpv7PfOAejQYDl4z11qoCsiSHjmipU09ws/exec';
+    const url = 'https://script.google.com/macros/s/AKfycbxaafXuvWzYbEh-UD_5uL-PfX3X1tNssaQttFpFiBBWVlvQ4cf-avSPlDs20E95rdjV/exec';
     var username = document.getElementById("username").value;
     var password = document.getElementById("password").value;
     var formData = new FormData();
@@ -94,6 +94,9 @@ body {
             sessionStorage.setItem("part", obj.part);
             sessionStorage.setItem("row_emp", obj.row_emp);
             sessionStorage.setItem("timeLasetdActive", Math.round(+new Date() / 1000));
+            sessionStorage.setItem("time_start_work", obj.time_start_work);
+            sessionStorage.setItem("time_finish_work", obj.time_finish_work);
+            
             window.location.href = "main.html";
             // let personName = sessionStorage.getItem("timeLasetdActive");
             //sessionStorage.removeItem("key");

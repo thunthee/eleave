@@ -335,7 +335,7 @@
 </html>
 
 <script>
-    const url = 'https://script.google.com/macros/s/AKfycbxim0XQN-53kQ8i8LKvmrDNOT3b2H0HhCIpv7PfOAejQYDl4z11qoCsiSHjmipU09ws/exec';
+    const url = 'https://script.google.com/macros/s/AKfycbxaafXuvWzYbEh-UD_5uL-PfX3X1tNssaQttFpFiBBWVlvQ4cf-avSPlDs20E95rdjV/exec';
 
 
     let btn_up = document.getElementById("btn-back-to-top");
@@ -423,15 +423,13 @@
         try {
             fetch(url, options)
                 .then((res) => { return res.json() })
-                .then((data) => {
-                    console.log(data);
-
+                .then((data) => { 
                     document.getElementById("parent_loader").style.visibility = "hidden";
                     if (data[0].status == "success") {
                         var obj = data[0].data;
                         document.getElementById("txt_paddingList").innerHTML = obj.length + " ใบลารอพิจารณา";
-                        var a = document.getElementById('btn_paddingList'); 
-                        a.setAttribute("href", "https://translate.google.com/");
+                        document.getElementById("btn_paddingList").setAttribute("onclick", "location.href='list.html'");
+ 
                     }
                 })
         } catch (e) {
