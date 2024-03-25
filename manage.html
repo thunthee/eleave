@@ -101,8 +101,8 @@
                 </li>
 
                 <li class="nav-item">
-                    <button class="btn btn-danger nav-bar float-end  text-white btn_center" style=" width:100%;"
-                        type="button">
+                    <button id="btn_paddingList" class="btn btn-danger nav-bar float-end  text-white btn_center"
+                        style=" width:100%;" type="button">
                         <span class="material-icons" style="box-sizing: border-box;  float: left; padding: 2px;"> mail
                         </span>
                         <a style="box-sizing: border-box; float: left; padding: 2px;" id="txt_paddingList"> </a>
@@ -430,8 +430,8 @@
                     if (data[0].status == "success") {
                         var obj = data[0].data;
                         document.getElementById("txt_paddingList").innerHTML = obj.length + " ใบลารอพิจารณา";
-                        var a = document.getElementById('txt_paddingList');
-                        a.href = "https://translate.google.com/"
+                        var a = document.getElementById('btn_paddingList'); 
+                        a.setAttribute("href", "https://translate.google.com/");
                     }
                 })
         } catch (e) {
