@@ -327,7 +327,7 @@
         formData.append('type', "PersonalLeaveList");
         formData.append('code', sessionStorage.getItem("code"));
 
-        var options = { 'method': 'post', 'body': formData };
+        var options = { 'method': 'post', 'body': formData, timeout: 500   };
         try {
             fetch(url, options)
                 .then((res) => { return res.json() })
