@@ -67,6 +67,7 @@
             color: whitesmoke;
             position: sticky;
             top: 0;
+            z-index: 1;
         }
 
 
@@ -327,7 +328,7 @@
         formData.append('type', "PersonalLeaveList");
         formData.append('code', sessionStorage.getItem("code"));
 
-        var options = { 'method': 'post', 'body': formData, timeout: 500   };
+        var options = { 'method': 'post', 'body': formData, timeout: 3000   };
         try {
             fetch(url, options)
                 .then((res) => { return res.json() })

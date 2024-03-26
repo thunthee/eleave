@@ -46,6 +46,7 @@
             color: whitesmoke;
             position: sticky;
             top: 0;
+            z-index: 1;
         }
 
         .my-custom-scrollbar {
@@ -97,7 +98,7 @@
         <div class="collapse navbar-collapse" id="collapsibleNavbar">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">รายการลาทั้งหมด</a>
+                    <a class="nav-link" id="btn_allList">รายการลาทั้งหมด</a>
                 </li>
 
                 <li class="nav-item">
@@ -119,7 +120,7 @@
     <div class="container  feature px-lg-0">
         <div class="row  g-0 mx-lg-0 ">
 
-            <div class="col-lg-5" style="margin-top: 30px; text-align: center;">
+            <div id="col_1" class="col-lg-5" style="margin-top: 30px; text-align: center;">
 
                 <form id="myForm" class="p-3 border border-dark rounded bg-light   " onsubmit="handleFormSubmit(this)">
                     <!-- Call JavaScript function "handleFormSubmit" -->
@@ -265,7 +266,7 @@
 
 
             </div>
-            <div class="col-lg-7 pt-5" style="float:center;">
+            <div class="col-lg-7 pt-5" style="float:center;" id="col_2">
                 <div class="row">
                     <canvas height="100" id="myChart"></canvas>
                 </div>
@@ -335,7 +336,7 @@
 </html>
 
 <script>
-    const url = 'https://script.google.com/macros/s/AKfycbyBiJ3fa0ed70Fd0Vzr-p1ccAeSEPrkbtwL0MpET23GPgZytqD2QMoOWJ3uFNsUJ2k/exec';
+    const url = 'https://script.google.com/macros/s/AKfycbxqaspaEE0yne3RHqQr3UmSLXd7kCo8Jt-eYc-n6Ihb4_ONdzkAuRNTausvFn1J-_Cb/exec';
 
 
     let btn_up = document.getElementById("btn-back-to-top");
@@ -371,6 +372,10 @@
     let part_mng_per = decodeURIComponent(window.location.search.match(/(\?|&)per\=([^&]*)/)[2]);
     let part_mng = getPartCode(/(\?|&)ind\=([^&]*)/);
     var isFirstClickShowList = true;
+
+    const searchParams = new URLSearchParams(window.location.search);
+    document.getElementById("btn_paddingList").setAttribute("onclick", "location.href='list.html?type=PendingList&" + searchParams + "'");
+    document.getElementById("btn_allList").setAttribute("onclick", "location.href='list.html?type=allList&" + searchParams + "'");
 
     if (!isNumeric(part_code) || !isNumeric(part_emp) || !isNumeric(part_mng_per) || !isNumeric(part_mng)) {
         alert("Error");
@@ -423,13 +428,11 @@
         try {
             fetch(url, options)
                 .then((res) => { return res.json() })
-                .then((data) => { 
+                .then((data) => {
                     document.getElementById("parent_loader").style.visibility = "hidden";
                     if (data[0].status == "success") {
                         var obj = data[0].data;
                         document.getElementById("txt_paddingList").innerHTML = obj.length + " ใบลารอพิจารณา";
-                        document.getElementById("btn_paddingList").setAttribute("onclick", "location.href='list.html'");
- 
                     }
                 })
         } catch (e) {
@@ -439,7 +442,6 @@
 
 
     function getPersonalLeaveSummary(part_emp) {
-
         var formData = new FormData();
         formData.append('type', "PersonalLeaveSummary");
         formData.append('row_emp', part_emp);
@@ -450,7 +452,17 @@
                 .then((data) => {
                     if (data[0].status == "success") {
                         var obj = data[0].data;
-                        setChart(obj);
+                        if (obj.length == 0) {
+                            document.getElementById("col_1").className = "col-lg-10";
+                            document.getElementById("col_2").className = "col-lg-2";
+                            document.getElementById('col_2').style.visibility = "hidden";
+                        }
+                        else {
+                            document.getElementById("col_1").className = "col-lg-5";
+                            document.getElementById("col_2").className = "col-lg-7 pt-5";
+                            document.getElementById('col_2').style.visibility = "visible";
+                            setChart(obj);
+                        }
                     }
                 })
         } catch (e) {
@@ -568,7 +580,7 @@
         formData.append('part_code', part_code);
 
         document.getElementById("parent_loader").style.visibility = "visible";
-        var options = { 'method': 'post', 'body': formData };
+        var options = { 'method': 'post', 'body': formData, timeout: 500 };
         try {
             fetch(url, options)
                 .then((res) => { return res.json() })
