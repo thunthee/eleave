@@ -124,10 +124,10 @@
             <div class="col-lg-12" style=" text-align: center;">
                 <p class="h5 mb-4 text-center  pt-4" id="head_text">รายการรออนุมัติ</p>
 
+                <input class='form-control input-sm' id='inputSearch' type='text' placeholder='ค้นหา'> <br>
 
                 <div class="table-wrapper-scroll-y my-custom-scrollbar" id="div_dataTable">
                     <!-- class=" table-wrapper-scroll-y my-custom-scrollbar" -->
-                    <input class='form-control input-sm' id='inputSearch' type='text' placeholder='ค้นหา'> <br>
 
 
                     <table class='table table-sm table-bordered table-striped mb-0' id="dataTable" name="dataTable"
@@ -241,7 +241,7 @@
             fetch(url, options)
                 .then((res) => { return res.json() })
                 .then((data) => {
-                     
+
                     if (data[0].status == "success") {
                         var obj = data[0].data;
 
@@ -408,7 +408,7 @@
         formData.append('mng', part_mng);
         formData.append('mng_per', part_mng_per);
         formData.append('rowNumber', list_row);
-        var options = { 'method': 'post', 'body': formData }; 
+        var options = { 'method': 'post', 'body': formData };
         document.getElementById("parent_loader").style.visibility = "visible";
         try {
             fetch(url, options)
