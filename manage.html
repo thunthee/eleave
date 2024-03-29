@@ -19,13 +19,14 @@
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sarabun">
 
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script> -->
-    <!--<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.4.0/dist/chartjs-plugin-datalabels.min.js"></script> -->
 
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-piechart-outlabels"></script>
+    <!--<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-piechart-outlabels"></script> -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.4.0/dist/chartjs-plugin-datalabels.min.js"></script>
+
 
     <link rel="stylesheet" href="style.css" />
     <style>
@@ -268,7 +269,7 @@
             </div>
             <div class="col-lg-7 pt-5" style="float:center;" id="col_2">
                 <div class="row">
-                    <canvas height="100" id="myChart"></canvas>
+                    <canvas id="myChart"></canvas>
                 </div>
                 <div class="row">
                     <p id="text_head">สรุปจำนวนวันลา (ที่อนุมัติ)</p>
@@ -509,27 +510,45 @@
         });
 
         var donutOptions = {
-            cutoutPercentage: 0,
             legend: {
                 display: false,
             },
             layout: {
-                padding: 50
+                padding: 50,
             },
             plugins: {
-                outlabels: {
-                    text: '%l %v วัน',
-                    color: '#fff',
+                datalabels: {
+                    display: true,
+                    formatter: (val, ctx) => {
+                        const label = ctx.chart.data.labels[ctx.dataIndex];
+
+                        const formattedVal = Intl.NumberFormat('en-US', {
+                            minimumFractionDigits: 2,
+                        }).format(val);
+
+                        return `${label} ${val} วัน`;
+                    },
+                    color: '#404040',
+                    backgroundColor: '#fff',
+                    borderWidth: 2,
+                    borderRadius: 4,
+                    align: 'end',
+                    anchor: 'end',
                     font: {
-                        resizable: true,
-                        minSize: 14,
-                        maxSize: 18
-                    }
+                        "resizable": true,
+                        "minSize": 18,
+                        "maxSize": 20
+                    },
+                }, value: {
+                    color: '#404040',
+                    font: {
+                        size: 20,
+                    }, 
+                    borderWidth: 2,
+                    borderRadius: 4,
+                    padding: 0,
+                    align: 'center',
                 }
-            },
-            title: {
-                display: false,
-                text: 'สรุปจำนวนวันลาที่อนุมัติแล้ว',
             }
         };
 
@@ -538,10 +557,8 @@
             labels: g_labels,
             datasets: [
                 {
-                    backgroundColor: colors.slice(0, 3),
-                    borderWidth: 0,
                     data: g_hr,
-                    borderColor: "#fff"
+                    backgroundColor: colors.slice(0, 3),
                 }
             ]
         };
@@ -549,7 +566,7 @@
         var chDonut1 = document.getElementById("myChart");
         if (chDonut1) {
             new Chart(chDonut1, {
-                type: 'pie',
+                type: 'doughnut',
                 data: chDonutData1,
                 options: donutOptions
             });
