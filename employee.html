@@ -1,0 +1,42 @@
+<html lang="th"> 
+<body> 
+    <div class="container  feature px-lg-0">
+
+        <div class="row  g-0 mx-lg-0">
+            <div class="col-lg-12" style=" text-align: center;">
+                <p class="h5 mb-4 text-center  pt-4" id="head_text">รายการรออนุมัติ</p>
+
+                <input class='form-control input-sm' id='inputSearch' type='text' placeholder='ค้นหา'> <br>
+
+                <div class="table-wrapper-scroll-y my-custom-scrollbar" id="div_dataTable">
+                    <!-- class=" table-wrapper-scroll-y my-custom-scrollbar" -->
+ 
+                    <table class='table table-sm table-bordered table-striped mb-0' id="dataTable" name="dataTable"
+                        style='font-size:0.9em'>
+                        <thead style='white-space: nowrap'>
+                            <tr>
+                                <th scope='col' style="width: 10%;">รหัสพนักงาน</th>
+                                <th scope='col' style="width: 10%;">ส่วนงาน</th>
+                                <th scope='col' style="width: 10%;">คำนำหน้า</th>
+                                <th scope='col' style="width: 10%;">ชื่อ</th>
+                                <th scope='col' style="width: 10%;">นามสกุล</th>
+                            </tr>
+                        </thead>
+                        <tbody id="myTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+</body>
+
+</html>
+
+<script> 
+    $("#inputSearch").on("keyup", function () {
+        var value = $(this).val().toLowerCase(); $("#myTable tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    }); 
+</script>

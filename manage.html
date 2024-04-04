@@ -99,6 +99,10 @@
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" style="cursor: pointer;" id="btn_allList"
+                        onclick="showEmp()">รายชื่อพนักงาน</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" style="cursor: pointer;" id="btn_allList"
                         onclick="showList('allList')">รายการลาทั้งหมด</a>
                 </li>
 
@@ -131,7 +135,7 @@
 </html>
 
 <script>
-    const url = 'https://script.google.com/macros/s/AKfycbxMZF7Gw97IqpwqmFf8tYWr7E2pzA4-dIERnQD70RTVB8y5_29W5B75VA2tf-wDuq4_/exec';
+    const url = 'https://script.google.com/macros/s/AKfycbwEKBudAPQwzBSfy5M0G-HElH8mTtoO-e6HJeJr9Vx5mvPXf9R1ZFw3neU16QFaYdxs/exec';
 
 
     let btn_up = document.getElementById("btn-back-to-top");
@@ -185,6 +189,12 @@
     }
 
 
+    function showEmp(){
+        $("#test_cont").load('employee.html');
+        getLeaveList('employee');
+    }
+
+
     function showList(type) {
         $("#test_cont").load('list.html');
         getLeaveList(type);
@@ -209,15 +219,20 @@
                     if (data[0].status == "success") {
                         var obj = data[0].data;
 
-                        if (this_type == 'PendingList') {
+                        if (this_type == 'employee') {
+                            document.getElementById("head_text").innerHTML = "รายชื่อพนักงาน";
+                            setEmpList(obj);
+                            document.getElementById("parent_loader").style.visibility = "hidden";
+                            return;
+                        }
+                        else if (this_type == 'PendingList') {
                             document.getElementById("txt_paddingList").innerHTML = obj.length + " ใบลารอพิจารณา";
                             document.getElementById("head_text").innerHTML = "รายการรออนุมัติ";
                         }
-                        else
+                        else if (this_type == 'allList')
                             document.getElementById("head_text").innerHTML = "รายการทั้งหมด";
 
                         setLeaveList(obj, this_type);
-
                         document.getElementById("parent_loader").style.visibility = "hidden";
                     }
                 })
@@ -230,13 +245,13 @@
 
 
     function ShowLeaveListTable() {
-        var x = document.getElementById("div_dataTable");
-        if (x.className === "table-wrapper-scroll-y my-custom-scrollbar Show") {
+        var div = document.getElementById("div_dataTable");
+        if (div.className === "table-wrapper-scroll-y my-custom-scrollbar Show") {
             if (isFirstClickShowList == true) {
                 isFirstClickShowList = false;
                 getPersonalLeaveList(part_code);
             }
-            x.className = "table-wrapper-scroll-y my-custom-scrollbar";
+            div.className = "table-wrapper-scroll-y my-custom-scrollbar";
             document.getElementById("btn_showList").innerHTML = "ซ่อน"
 
             var ele = document.getElementById("div_dataTable");
@@ -251,12 +266,12 @@
 
         } else {
             document.getElementById("btn_showList").innerHTML = "แสดง"
-            x.className = "table-wrapper-scroll-y my-custom-scrollbar Show";
+            div.className = "table-wrapper-scroll-y my-custom-scrollbar Show";
         }
     }
 
 
-    function getPendingList(part_mng) { 
+    function getPendingList(part_mng) {
         var formData = new FormData();
         formData.append('type', "PendingList");
         formData.append('index_mng', part_mng);
@@ -511,6 +526,40 @@
         }
     }
 
+
+    function setEmpList(obj) {
+        $('#dataTable tbody').empty();
+        var table = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
+        obj.forEach(row => { 
+            var num_row = table.rows.length;
+            var c, r;
+            r = table.insertRow(num_row);
+ 
+            var ind_col = 0;
+
+            c = r.insertCell(ind_col); c.style.textAlign = "center"; c.style.verticalAlign = "middle";
+            c.innerHTML = row.code; ++ind_col;
+ 
+            
+            c = r.insertCell(ind_col); c.style.textAlign = "center"; c.style.verticalAlign = "middle";
+            c.innerHTML =  row.part; ++ind_col;
+            
+            c = r.insertCell(ind_col); c.style.textAlign = "center"; c.style.verticalAlign = "middle";
+            c.innerHTML =  row.prefix; ++ind_col;
+
+            c = r.insertCell(ind_col); c.style.textAlign = "center"; c.style.verticalAlign = "middle";
+            c.innerHTML =  row.firstname; ++ind_col;
+
+            c = r.insertCell(ind_col); c.style.textAlign = "center"; c.style.verticalAlign = "middle";
+            c.innerHTML =  row.lastname; ++ind_col;
+               
+
+            var ele = document.getElementById("div_dataTable");
+            ele.scrollTop = ele.scrollHeight;
+
+        });
+
+    }
 
 
     function setLeaveList(obj, this_type) {
