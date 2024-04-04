@@ -11,22 +11,24 @@
   <title>ลาออนไลน์ T&T</title>
 
 </head>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>  
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <link rel="stylesheet" href="style.css" />
 <style>
- html {
-  background-color: #56198b;
-}
+  html {
+    background-color: #56198b;
+  }
 
-body {
-  font-family: "Sarabun", sans-serif;
-  height: 100vh;
-}
-
+  body {
+    font-family: "Sarabun", sans-serif;
+    height: 100vh;
+  }
 </style>
+
 <body>
-  <div  id="parent_loader"  class="loader-bg"><div id="loader" class="center"></div> </div>
-  
+  <div id="parent_loader" class="loader-bg">
+    <div id="loader" class="center"></div>
+  </div>
+
   <div class="wrapper fadeInDown">
     <div id="formContent">
 
@@ -38,19 +40,19 @@ body {
 
       <h3> ระบบลาออนไลน์ </h3>
 
-      <form id="login-form" method="post" role="form">
+      <form id=" login-form" method="post" role="form">
         <input type="text" id="username" class="fadeIn second" name="username" placeholder="รหัสพนักงาน">
         <input type="password" id="password" class="fadeIn third" name="password" placeholder="รหัสผ่าน">
         <p id="msg"></p>
         <input type="submit" class="fadeIn fourth" value="เข้าสู่ระบบ">
-      </form>
+        </form>
 
-      <!--div id="formFooter">
+        <!--div id="formFooter">
         <a class="underlineHover" href="#">ลืมรหัสผ่าน?</a>
       </div-->
 
+      </div>
     </div>
-  </div>
 
 </body>
 
@@ -59,11 +61,12 @@ body {
 <script>
 
   $('#login-form').submit(function (e) {
-    e.preventDefault()  
-    document.getElementById("parent_loader").style.visibility = "visible";  
+    e.preventDefault()
+    document.getElementById("parent_loader").style.visibility = "visible";
     document.getElementById("msg").innerHTML = "";
 
-    const url = 'https://script.google.com/macros/s/AKfycbxu-E9FTY24i_M26sj65zhlx2SnFmyCQqT_2tfhmabVo_nrrYkBcgBTx7uhlqqaHEXn/exec';
+    const url = 'https://script.google.com/macros/s/AKfycbwEKBudAPQwzBSfy5M0G-HElH8mTtoO-e6HJeJr9Vx5mvPXf9R1ZFw3neU16QFaYdxs/exec';
+
     var username = document.getElementById("username").value;
     var password = document.getElementById("password").value;
     var formData = new FormData();
@@ -96,7 +99,7 @@ body {
             sessionStorage.setItem("timeLasetdActive", Math.round(+new Date() / 1000));
             sessionStorage.setItem("time_start_work", obj.time_start_work);
             sessionStorage.setItem("time_finish_work", obj.time_finish_work);
-            
+
             window.location.href = "main.html";
             // let personName = sessionStorage.getItem("timeLasetdActive");
             //sessionStorage.removeItem("key");
